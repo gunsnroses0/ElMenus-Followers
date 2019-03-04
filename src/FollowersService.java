@@ -1,26 +1,38 @@
-import Commands.Command;
-
-//import Commands.delete.DeleteMessage;
-//import Commands.get.GetMessage;
-//import Commands.get.GetMessages;
-//import Commands.patch.UpdateMessage;
-//import Commands.post.CreateMessage;
-import com.rabbitmq.client.*;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeoutException;
 
-public class FollowersService {
-	private static final String RPC_QUEUE_NAME = "restaurants-request";
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+
+
+import com.rabbitmq.client.AMQP;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.Consumer;
+import com.rabbitmq.client.DefaultConsumer;
+import com.rabbitmq.client.Envelope;
+
+import Commands.*;
+public class FollowersService {
+	private static final String RPC_QUEUE_NAME = "follower-request";
+	public static  MongoDatabase database;
 	public static void main(String[] argv) {
 
+		MongoClientURI uri = new MongoClientURI(
+				"mongodb://admin:admin@cluster0-shard-00-00-nvkqp.gcp.mongodb.net:27017,cluster0-shard-00-01-nvkqp.gcp.mongodb.net:27017,cluster0-shard-00-02-nvkqp.gcp.mongodb.net:27017/El-Menus?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true");
+
+		MongoClient mongoClient = new MongoClient(uri);
+		database = mongoClient.getDatabase("El-Menus");
 		// initialize thread pool of fixed size
 		final ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(4);
 
@@ -52,12 +64,15 @@ public class FollowersService {
 						Command cmd = null;
 						System.out.println(command);
 						switch (command) {
-						case "CreateRestaurants":
-							
+						case "CreateFollower":
+							cmd = new CreateFollower();
 							break;
-						case "RetrieveRestaurants":
-						
+						case "DeleteFollower":
+							cmd = new DeleteFollower();
 							break;
+						case "RetrieveFollower":
+							cmd = new RetrieveFollower();
+							break;	
 //                            case "UpdateMessages":   cmd = new UpdateMessage();
 //                                break;
 //                            case "DeleteMessages":   cmd = new DeleteMessage();
@@ -98,4 +113,8 @@ public class FollowersService {
 		String result = messageJson.get("command").toString();
 		return result;
 	}
+	public static MongoDatabase getDb() {
+		return database;
+	}
+
 }
