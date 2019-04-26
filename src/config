@@ -1,0 +1,10 @@
+POST,/follower/id,CreateFollower
+GET,/follower/id,RetrieveFollower
+DELETE,/follower/id,DeleteFollower
+POST,/follower/addCommand/,AddCommand
+POST,/follower/updateCommand/,UpdateCommand
+POST,/follower/deleteCommand/,DeleteCommand
+POST,/follower/updateThreadPoolCount/,UpdateThreadPoolCount
+POST,/follower/updateDBPoolCount/,UpdateDBPoolCount
+GET,/follower/freeze/,FreezeQueue
+GET,/follower/resume/,ResumeQueue

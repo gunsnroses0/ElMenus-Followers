@@ -27,6 +27,7 @@ public class RetrieveFollower extends Command {
 			JSONObject messageBody = (JSONObject) parser.parse((String) props.get("body"));
 			String uri = (messageBody).get("uri").toString();
 			String target_username = "", type = "";
+			System.out.println("Paramaters" + uri);
 			if(uri.contains("?type=")) {
 				target_username = StringUtils.substringBetween(uri, "/follower/", "?type=");
 				type = ((JSONObject) (messageBody).get("parameters")).get("type").toString();
