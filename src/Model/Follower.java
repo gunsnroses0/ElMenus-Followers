@@ -39,7 +39,7 @@ public class Follower {
 	}
 	private static MongoCollection<Document> collection = null;
 	
-	public static HashMap<String, Object> create(HashMap<String, Object> attributes, String target_username) {
+	public static HashMap<String, Object> create(HashMap<String, Object> attributes, String target_username) throws ParseException {
 
 		MongoClientOptions.Builder options = MongoClientOptions.builder()
 	            .connectionsPerHost(DbPoolCount);
@@ -59,9 +59,14 @@ public class Follower {
 		newFollower.append("target_username", target_username);
 		
 		collection.insertOne(newFollower);
+		JSONParser parser = new JSONParser();
+
+		HashMap<String, Object> returnValue = Command.jsonToMap((JSONObject) parser.parse(newFollower.toJson()));
+
+
 		mongoClient.close();
 		
-		return attributes;
+		return returnValue;
 	}
 	public static HashMap<String, Object> delete(String messageId) {
 		
