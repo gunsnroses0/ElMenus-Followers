@@ -52,6 +52,7 @@ public class FollowersService {
 	
 	public static void main(String[] argv) {
 		run();
+		ServiceController.run();
 	}
 	public static void run() {
 		try {
