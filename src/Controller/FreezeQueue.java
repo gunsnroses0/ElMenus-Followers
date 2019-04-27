@@ -30,10 +30,10 @@ public class FreezeQueue extends Command {
 		HashMap<String, Object> props = parameters;
 		Channel channel = (Channel) props.get("channel");
 		try {
-			FollowersService.setRPC_QUEUE_NAME("like-request-DELETED");;
+			FollowersService.setRPC_QUEUE_NAME("follower-request-DELETED");;
 			connection = factory.newConnection();
 			channel = connection.createChannel();
-			channel.queueDelete("like-request",false,false);
+			channel.queueDelete("follower-request",false,false);
 			AMQP.BasicProperties properties = (AMQP.BasicProperties) props.get("properties");
 			AMQP.BasicProperties replyProps = (AMQP.BasicProperties) props.get("replyProps");
 			Envelope envelope = (Envelope) props.get("envelope");

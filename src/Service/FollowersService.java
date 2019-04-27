@@ -29,6 +29,8 @@ import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 
 import Commands.*;
+import Model.Follower;
+
 public class FollowersService {
 	private static  String RPC_QUEUE_NAME = "follower-request";
 	public static  MongoDatabase database;
@@ -53,6 +55,7 @@ public class FollowersService {
 	public static void main(String[] argv) {
 		run();
 		ServiceController.run();
+		Follower.initializeDb();
 	}
 	public static void run() {
 		try {

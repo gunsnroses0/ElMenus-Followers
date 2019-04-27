@@ -39,15 +39,23 @@ public class Follower {
 	public static void setDbPoolCount(int dbPoolCount) {
 		DbPoolCount = dbPoolCount;
 	}
+	
+	static MongoClientOptions.Builder options = null;
+	static MongoClientURI uri = null;
+	static MongoClient mongoClient = null; 
+	
+	public static void initializeDb() {
+		options = MongoClientOptions.builder()
+				.connectionsPerHost(DbPoolCount);
+		uri = new MongoClientURI(
+				host,options);
+		mongoClient = new MongoClient(uri);
+			
+	}
 	private static MongoCollection<Document> collection = null;
 	
 	public static HashMap<String, Object> create(HashMap<String, Object> attributes, String target_username) throws ParseException {
 
-		MongoClientOptions.Builder options = MongoClientOptions.builder()
-	            .connectionsPerHost(DbPoolCount);
-		MongoClientURI uri = new MongoClientURI(
-				host,options);
-		MongoClient mongoClient = new MongoClient(uri);
 		MongoDatabase database = mongoClient.getDatabase("El-Menus");
 
 		// Retrieving a collection
@@ -72,11 +80,6 @@ public class Follower {
 	}
 	public static HashMap<String, Object> delete(String messageId) {
 		
-		MongoClientOptions.Builder options = MongoClientOptions.builder()
-	            .connectionsPerHost(DbPoolCount);
-		MongoClientURI uri = new MongoClientURI(
-				host,options);
-		MongoClient mongoClient = new MongoClient(uri);
 		MongoDatabase database = mongoClient.getDatabase("El-Menus");
 //    	Method method =   Class.forName("PlatesService").getMethod("getDB", null);
 //    	MongoDatabase database = (MongoDatabase) method.invoke(null, null);
@@ -107,10 +110,6 @@ public class Follower {
 		return message;
 	}
 	public static ArrayList<ArrayList<HashMap<String, Object>>> get(String username) {
-		MongoClientOptions.Builder options = MongoClientOptions.builder()
-	            .connectionsPerHost(DbPoolCount);
-		MongoClientURI uri = new MongoClientURI(
-				host,options);
 
 		MongoClient mongoClient = new MongoClient(uri);
 		MongoDatabase database = mongoClient.getDatabase("El-Menus");
@@ -159,7 +158,6 @@ public class Follower {
 				e.printStackTrace();
 			}
 		}
-		mongoClient.close();
 		System.out.println("followings"+followings);
 		System.out.println("followers"+followers);
 		ArrayList<ArrayList<HashMap<String, Object>>> result = new ArrayList<ArrayList<HashMap<String, Object>>> ();
