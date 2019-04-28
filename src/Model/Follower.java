@@ -73,8 +73,6 @@ public class Follower {
 
 		HashMap<String, Object> returnValue = Command.jsonToMap((JSONObject) parser.parse(newFollower.toJson()));
 
-
-		mongoClient.close();
 		
 		return returnValue;
 	}
